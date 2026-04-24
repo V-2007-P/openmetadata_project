@@ -1,0 +1,114 @@
+<!-- <link rel="stylesheet" href="/css/style.css">
+<div class="dashboard-wrapper">
+    <header class="main-header">
+        <div class="brand">
+            <a href="/dashboard" style="text-decoration: none; color: inherit;">
+                <span class="ai-icon">⬅️</span>
+                <h1>VAANI <span class="sub-text">Deep Dive</span></h1>
+            </a>
+        </div>
+    </header>
+
+    <div class="glass-card detail-view">
+        <div class="detail-header">
+            <h2 style="color: var(--accent-blue);"><%= alert.entityName %></h2>
+            <span class="badge badge-purple">OWNER: <%= alert.owner %></span>
+        </div>
+
+        <div class="ai-insight-box">
+            <label>🎙️ VAANI EXTENDED ANALYSIS</label>
+            <p><%= alert.aiSummary %></p>
+            <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 15px 0;">
+            <p style="font-size: 0.85rem; color: var(--text-dim);">
+                <strong>Root Cause Analysis:</strong> This alert was triggered by a <code><%= alert.eventType %></code> event in the OpenMetadata Sandbox. 
+                Downstream impact affects: <strong><%= alert.impactedAssets.join(', ') %></strong>.
+            </p>
+        </div>
+
+        <div class="technical-logs">
+            <label>RAW METADATA PAYLOAD</label>
+            <pre><code>{
+  "asset": "<%= alert.entityName %>",
+  "status": "Flagged",
+  "timestamp": "<%= alert.createdAt %>",
+  "governance": "Verified"
+}</code></pre>
+        </div>
+    </div>
+</div> -->
+
+<link rel="stylesheet" href="/css/style.css">
+<div class="dashboard-wrapper">
+    <header class="main-header">
+        <div class="brand">
+            <a href="/dashboard" style="text-decoration: none; color: inherit;">
+                <span class="ai-icon">⬅️</span>
+                <h1>VAANI <span class="sub-text">Deep Dive</span></h1>
+            </a>
+        </div>
+    </header>
+
+    <div class="glass-card detail-view">
+        <div class="detail-header">
+            <h2 style="color: var(--accent-blue);"><%= alert.entityName %></h2>
+            <span class="badge badge-purple">OWNER: <%= alert.owner %></span>
+        </div>
+
+        <div class="ai-insight-box">
+            <label>🎙️ VAANI EXTENDED ANALYSIS</label>
+            <p><%= alert.aiSummary %></p>
+            <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 15px 0;">
+            <p style="font-size: 0.85rem; color: var(--text-dim);">
+                <strong>Root Cause Analysis:</strong> This alert was triggered by a <code><%= alert.eventType %></code> event in the OpenMetadata Sandbox. 
+                Downstream impact affects: <strong><%= alert.impactedAssets.join(', ') %></strong>.
+            </p>
+        </div>
+
+        <div class="technical-logs">
+            <label>RAW METADATA PAYLOAD</label>
+            <pre><code>{
+  "asset": "<%= alert.entityName %>",
+  "status": "Flagged",
+  "timestamp": "<%= alert.createdAt %>",
+  "governance": "Verified"
+}</code></pre>
+        </div>
+
+        <div class="governance-section" style="margin-top: 40px; border-top: 1px solid var(--border-color); padding-top: 25px;">
+            <label style="font-size: 0.7rem; color: #a855f7; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; display: block; margin-bottom: 20px;">
+                🛡️ Governance History & Audit Trail
+            </label>
+            
+            <div class="timeline" style="border-left: 2px solid var(--border-color); padding-left: 20px; margin-left: 10px;">
+    <% if (typeof history !== 'undefined' && history.length > 0) { %>
+        <% history.forEach(item => { %>
+            <div class="timeline-item history-clickable" 
+                 onclick="window.location.href='/asset/<%= item._id %>'"
+                 style="margin-bottom: 25px; position: relative; cursor: pointer;">
+                
+                <div class="dot-indicator"></div>
+                
+                <span style="font-size: 0.75rem; color: var(--text-dim); font-weight: 600;">
+                    <%= item.createdAt.toDateString() %>
+                </span>
+                
+                <p style="margin: 5px 0 0 0; font-size: 0.95rem; color: var(--text-main);">
+                    Action: <span style="color: var(--accent-blue); font-weight: 600;"><%= item.eventType %></span>
+                </p>
+                
+                <p style="margin-top: 5px; color: #94a3b8; font-size: 0.85rem; font-style: italic; line-height: 1.4;">
+                    "<%= item.aiSummary.substring(0, 85) %>..."
+                </p>
+            </div>
+        <% }) %>
+    <% } else { %>
+                    <div style="padding: 10px; background: rgba(255,255,255,0.03); border-radius: 8px;">
+                        <p style="color: var(--text-dim); font-size: 0.85rem; margin: 0;">
+                            ✨ First Recorded Governance Event for this Asset.
+                        </p>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+        </div>
+</div>

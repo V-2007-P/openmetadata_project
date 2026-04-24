@@ -1,0 +1,196 @@
+
+<link rel="stylesheet" href="/css/style.css">
+
+<div class="dashboard-wrapper">
+    <header class="main-header">
+        <div class="brand">
+            <span class="ai-icon">✨</span>
+            <h1>VAANI <span class="sub-text">Observability</span></h1>
+        </div>
+        <div class="header-actions">
+            <button onclick="simulateMetadataEvent()" class="btn-simulate">
+                 <span class="bolt">⚡</span> Simulate OpenMetadata Signal
+            </button>
+            <div class="system-stats">
+                <span class="pulse-dot"></span> Active Monitoring
+            </div>
+        </div>
+        
+    </header>
+
+    <main class="feed-grid">
+        <% if (alerts.length === 0) { %>
+            <div class="empty-state">
+                <p>Waiting for OpenMetadata signals... Make sure your Webhook is active! 📡</p>
+            </div>
+        <% } %>
+
+       <% alerts.forEach(alert => { %>
+    <div class="glass-card clickable-card" onclick="goToDeepDive('<%= alert._id %>')">
+        <div class="card-top">
+            <h3 class="asset-title"><%= alert.entityName %></h3>
+            
+            <div class="card-actions">
+                <span class="event-pill"><%= alert.eventType %></span>
+                
+                <div class="menu-container" onclick="event.stopPropagation()">
+                        <button class="three-dots" onclick="event.stopPropagation(); toggleMenu('menu-<%= alert._id %>')">⋮</button>        
+                         <div id="menu-<%= alert._id %>" class="dropdown-menu">
+                        <a href="#" onclick="sendRealEmail('<%= alert._id %>', '<%= alert.owner %>')">📧 Notify Owner</a>
+                        <a href="#" onclick="dismissAlert('<%= alert._id %>')" style="color: #ef4444;">🗑️ Dismiss Alert</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ai-insight-box">
+            <label>🎙️ AI INSIGHT</label>
+            <p><%= alert.aiSummary %></p>
+        </div>
+
+        <div class="card-footer">
+            <div class="footer-item">
+                <small>OWNER</small>
+                <span class="badge badge-purple"><%= alert.owner || 'Unassigned' %></span>
+            </div>
+            <div class="footer-item">
+                <small>IMPACT</small>
+                <span class="badge <%= (alert.impactedAssets && alert.impactedAssets.includes('Unknown')) ? 'badge-warn' : 'badge-danger' %>">
+                    <%= (alert.impactedAssets && alert.impactedAssets.length > 0) ? alert.impactedAssets[0] : 'Unknown' %>
+                </span>
+            </div>
+        </div>
+    </div>
+<% }) %>
+    </main>
+</div>
+
+<div id="toast-container" class="toast-hidden">
+    <div class="toast-content">
+        <span class="toast-icon">📧</span>
+        <div class="toast-text">
+            <strong id="toast-title">Connecting...</strong>
+            <p id="toast-msg">Processing request...</p>
+        </div>
+    </div>
+</div>
+
+<script>
+
+async function simulateMetadataEvent() {
+    // 1. Define different scenarios
+    const scenarios = [
+        { entityName: "dim_customer_v2", eventType: "entityUpdated", owner: "Sonu (Lead)" },
+        { entityName: "fact_sales_v1", eventType: "entityDeleted", owner: "Finance_Team" },
+        { name: "user_pii_vault", type: "entityCreated", owner: "Security_Dept" }
+    ];
+
+    // 2. Pick one at random
+    const randomEvent = scenarios[Math.floor(Math.random() * scenarios.length)];
+
+    // 3. Show a small loading state on the button
+    const btn = document.querySelector('.btn-simulate');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = "⏳ Injecting Signal...";
+    btn.style.opacity = "0.7";
+
+    try {
+        // 4. Send the POST request to your own webhook route
+        const response = await fetch('/webhook', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(randomEvent)
+        });
+
+        if (response.ok) {
+            // Refresh to see the new AI card and Deep Dive!
+            window.location.reload();
+        }
+    } catch (err) {
+        console.error("Simulation failed:", err);
+        btn.innerHTML = "❌ Connection Error";
+        setTimeout(() => { btn.innerHTML = originalText; btn.style.opacity = "1"; }, 2000);
+    }
+}
+
+function toggleMenu(menuId) {
+    // This is the shield!
+    if (event) event.stopPropagation(); 
+    
+    // Close other menus
+    document.querySelectorAll('.dropdown-menu').forEach(menu => {
+        if (menu.id !== menuId) menu.classList.remove('show');
+    });
+    
+    // Toggle the clicked menu
+    const menu = document.getElementById(menuId);
+    if (menu) {
+        menu.classList.toggle('show');
+    }
+}
+// Close menu if user clicks outside
+window.onclick = function(event) {
+    if (!event.target.matches('.three-dots')) {
+        document.querySelectorAll('.dropdown-menu').forEach(menu => {
+            menu.classList.remove('show');
+        });
+    }
+}
+
+function goToDeepDive(id) {
+    // This sends the user to the detail page when the card is clicked
+    window.location.href = `/asset/${id}`;
+}
+
+async function dismissAlert(id) {
+    // Stop the click from opening the Deep Dive page
+    event.stopPropagation(); 
+    
+    if (confirm("Dismiss this alert?")) {
+        const response = await fetch(`/alert/delete/${id}`, { method: 'POST' });
+        if (response.ok) {
+            window.location.reload(); 
+        }
+    }
+}
+
+// REAL EMAIL Logic
+async function sendRealEmail(id, owner) {
+    if (event) {
+        event.stopPropagation();
+        event.preventDefault(); 
+    }
+    
+    const toast = document.getElementById('toast-container');
+    const title = document.getElementById('toast-title');
+    const msg = document.getElementById('toast-msg');
+
+    if (!toast) return console.error("Toast container missing!");
+
+    // 1. Show Toast with "Loading" state
+    title.innerText = "Dispatching Email...";
+    msg.innerText = `Contacting ${owner || 'Data Steward'}...`;
+    toast.className = "toast-visible"; // Swaps class to show it
+
+    try {
+        const response = await fetch(`/alert/notify/${id}`, { method: 'POST' });
+        
+        if (response.ok) {
+            // 2. Success State
+            title.innerText = "Email Sent! ✅";
+            msg.innerText = "Check your inbox for the VAANI report.";
+        } else {
+            throw new Error("Server rejected request");
+        }
+    } catch (err) {
+        // 3. Error State
+        title.innerText = "Delivery Failed ❌";
+        msg.innerText = "Check server logs & .env credentials.";
+    }
+
+    // 4. Auto-hide after 5 seconds
+    setTimeout(() => { 
+        toast.className = "toast-hidden"; 
+    }, 5000);
+}
+</script>
