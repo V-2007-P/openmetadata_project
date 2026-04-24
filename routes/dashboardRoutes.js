@@ -12,19 +12,6 @@ router.get('/dashboard', async (req, res) => {
     }
 });
 
-// ADD THIS NEW ROUTE HERE
-// router.get('/asset/:id', async (req, res) => {
-//     try {
-//         const alert = await Alert.findById(req.params.id);
-//         if (!alert) return res.redirect('/dashboard');
-        
-//         // Ensure the file name matches your .ejs file exactly
-//         res.render('assetDetail', { alert }); 
-//     } catch (err) {
-//         console.error(err);
-//         res.redirect('/dashboard');
-//     }
-// });
 router.get('/asset/:id', async (req, res) => {
     try {
         const currentAlert = await Alert.findById(req.params.id);
