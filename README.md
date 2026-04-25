@@ -1,13 +1,13 @@
-<h2>VAANI: AI-Powered Governance & Observability for OpenMetadata</h2>
+<h1>🔥⚡️VAANI: AI-Powered Governance & Observability for OpenMetadata</h1>
 
 VAANI (Vocalized AI-driven Alerting & Notification Interface) is an intelligent observability layer designed to bridge the gap between raw metadata signals and actionable data governance. Built for the OpenMetadata x WeMakeDevs Hackathon 2026, VAANI transforms complex technical "ChangeEvents" from OpenMetadata into human-readable insights using Generative AI.
 
-🚀 Live Demo & Deployment
+<h3>🚀 Live Demo & Deployment</h3>
 Live Application: (https://openmetadata-project.onrender.com)
 
 Demo Video: (https://youtu.be/dmvxQPO292A?si=MoFGSNJbckhuMQvC)
 
-🔗 The OpenMetadata Integration
+<h3>🔗 The OpenMetadata Integration</h3>
 VAANI is not just a standalone tool; it is a specialized extension for the OpenMetadata ecosystem.
 
 1. Event-Driven Architecture (Webhooks)
@@ -25,7 +25,7 @@ Smart Summarization: Converts complex JSON diffs into plain English for non-tech
 
 Proactive Ownership: Extracts owner information from the OpenMetadata registry to route alerts automatically.
 
-🛠️ Tech Stack
+<h3>🛠️ Tech Stack</h3>
 Frontend: EJS (Embedded JavaScript), CSS3, JavaScript (ES6+)
 
 Backend: Node.js, Express.js
@@ -38,7 +38,7 @@ Integration: OpenMetadata Webhooks & APIs
 
 Communication: Nodemailer (SMTP Integration for automated alerting)
 
-✨ Key Features
+<h3>✨ Key Features</h3>
 Real-time Webhook Listener: Captures live signals from OpenMetadata.
 
 AI Governance Cards: Dynamic UI cards that summarize metadata risks.
@@ -49,7 +49,7 @@ Automated Notification Loop: Instant AI-summarized emails sent to data owners id
 
 Simulation Engine: A built-in feature for judges to simulate OpenMetadata signals and see the AI logic in action immediately.
 
-⚙️ Installation & Setup
+<h3>⚙️ Installation & Setup</h3>
 Clone the repository:
 
 Bash
@@ -74,5 +74,5 @@ Run locally:
 Bash
 npm start
 
-🛡️ Governance Impact
+<h3>🛡️ Governance Impact</h3>
 VAANI moves the needle for OpenMetadata users by solving Alert Fatigue. Instead of hundreds of raw notifications, users receive context. It turns a "Metadata Repository" into an "Active Governance Center."
