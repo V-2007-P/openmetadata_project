@@ -1,4 +1,4 @@
-VAANI: AI-Powered Governance & Observability for OpenMetadata
+<h2>VAANI: AI-Powered Governance & Observability for OpenMetadata</h2>
 
 VAANI (Vocalized AI-driven Alerting & Notification Interface) is an intelligent observability layer designed to bridge the gap between raw metadata signals and actionable data governance. Built for the OpenMetadata x WeMakeDevs Hackathon 2026, VAANI transforms complex technical "ChangeEvents" from OpenMetadata into human-readable insights using Generative AI.
 
